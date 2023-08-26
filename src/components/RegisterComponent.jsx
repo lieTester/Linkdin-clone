@@ -1,10 +1,12 @@
-import logo from "../assets/images/LinkedIn_Logo.svg";
-import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 import { FaLinkedin, FaRegCopyright } from "react-icons/fa";
 import { GoogleAuthAPI, RegisterAPI } from "../Api/AuthApi";
+import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
+import logo from "../assets/images/LinkedIn_Logo.svg";
 
 function RegisterComponent() {
+   const navigate = useNavigate();
    const [credentials, setCredentials] = useState({ email: "", password: "" });
    const register = () => {
       try {
@@ -16,16 +18,15 @@ function RegisterComponent() {
          console.log(error);
       }
    };
-    const googleSignIn = () => {
-
-       try {
-          console.log("Signing in...");
-          let res = GoogleAuthAPI();
-          console.log(res);
-       } catch (error) {
-          console.error(error);
-       }
-    };
+   const googleSignIn = () => {
+      try {
+         console.log("Signing in...");
+         let res = GoogleAuthAPI();
+         console.log(res);
+      } catch (error) {
+         console.error(error);
+      }
+   };
    return (
       <section className="w-full h-screen  pb-0 font-[system-ui]  md:!bg-[#F3F2F0]">
          <header className="w-[90%] md:w-[70%] mx-auto pt-5">
@@ -141,9 +142,14 @@ function RegisterComponent() {
                </div>
                <div className="w-full mt-7 text-center">
                   Already on LinkedIn?{" "}
-                  <a href="#" className="text-[#0A66C2] font-semibold">
+                  <button
+                     onClick={() => {
+                        navigate("/login");
+                     }}
+                     className="text-[#0A66C2] font-semibold"
+                  >
                      Sign in
-                  </a>
+                  </button>
                </div>
             </section>
             <div className="w-[90%] mx-auto mt-4 text-center ">

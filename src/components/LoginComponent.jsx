@@ -139,9 +139,14 @@ function LoginComponent() {
          <footer className="h-auto md:!h-[calc(100%-70%-9%)] pt-8 ">
             <div className="w-full text-center ">
                New to LinkedIn?{" "}
-               <a href="" className="text-[#0A66C2] font-semibold">
+               <button
+                  onClick={() => {
+                     navigate("/register");
+                  }}
+                  className="text-[#0A66C2] font-semibold"
+               >
                   Join now
-               </a>
+               </button>
             </div>
 
             <ul className="hidden md:flex justify-center mt-11 text-[12px] text-gray-600 [&>li]:px-3 [&>li]:hover:cursor-pointer [&>li:hover]:underline">
