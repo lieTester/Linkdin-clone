@@ -16,16 +16,16 @@ function RegisterComponent() {
          console.log(error);
       }
    };
-   //  const googleSignIn = (e) => {
-   //     e.preventDefault();
-   //     try {
-   //        console.log("Signing in...");
-   //        let res = GoogleAuthAPI();
-   //        console.log(res);
-   //     } catch (error) {
-   //        console.error(error);
-   //     }
-   //  };
+    const googleSignIn = () => {
+
+       try {
+          console.log("Signing in...");
+          let res = GoogleAuthAPI();
+          console.log(res);
+       } catch (error) {
+          console.error(error);
+       }
+    };
    return (
       <section className="w-full h-screen  pb-0 font-[system-ui]  md:!bg-[#F3F2F0]">
          <header className="w-[90%] md:w-[70%] mx-auto pt-5">
@@ -132,9 +132,7 @@ function RegisterComponent() {
                </div>
                <div className="relative  text-gray-500 text-[16px] font-semibold">
                   <button
-                     onClick={() => {
-                        console.log("google");
-                     }}
+                     onClick={googleSignIn}
                      className="z-10 w-full py-1  rounded-full outline outline-1 outline-gray-400 hover:bg-slate-100 hover:ring-2 hover:ring-[#616161] hover:-outline-offset-[.5px]  hover:outline-[#616161] transition-all duration-300"
                   >
                      <FcGoogle className="inline text-[18px] mb-1 mr-1" /> Sign
