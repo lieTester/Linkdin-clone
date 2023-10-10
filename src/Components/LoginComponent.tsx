@@ -19,9 +19,9 @@ function LoginComponent() {
          const res = await LoginAPI(credentials.email, credentials.password);
          if (setUser && res) {
             console.log(res);
+            setUser(res);
          }
          navigate("/");
-         console.log(res);
       } catch (error) {
          console.log(error);
       }

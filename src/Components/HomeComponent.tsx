@@ -3,6 +3,8 @@ import Header from "./subComponents/Header";
 import { auth } from "../../firebaseconfig";
 import { getAuth } from "firebase/auth"; // Import User type
 import AuthContext from "../Context/AuthProvider";
+import LoadingPage from "./subComponents/LoderComponent";
+import LoginComponent from "./LoginComponent";
 
 function HomeComponent() {
    const contextValue = useContext(AuthContext);
@@ -10,25 +12,25 @@ function HomeComponent() {
    const setUser = contextValue?.setUser;
 
    useEffect(() => {
-      // const authInstance = getAuth(); // Rename to authInstance to avoid conflict with imported auth
-      console.log(auth);
-      // authInstance.onAuthStateChanged((res) => {
-      //    console.log(res);
-      //    if (setUser && res) setUser(res);
-      //    // Set the user state
-      // });
-
-      console.log(user);
+      auth.onAuthStateChanged((res) => {
+         //    // Set the user state
+         if (setUser && res) setUser(res);
+         console.log(res, user);
+      });
    }, [getAuth]);
 
    return (
       <>
-         {user ? (
-            <section className="min-h-screen pt-10 bg-[#F4F2EE]">
-               {user?.email && <Header />}
-            </section>
+         {user !== null ? (
+            user?.email ? (
+               <section className="min-h-screen pt-10 bg-[#F4F2EE]">
+                  {user?.email && <Header />}
+               </section>
+            ) : (
+               <LoginComponent />
+            )
          ) : (
-            <div> can't login</div>
+            <LoadingPage />
          )}
       </>
    );
