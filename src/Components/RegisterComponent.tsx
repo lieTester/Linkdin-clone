@@ -1,17 +1,26 @@
-import { useNavigate } from "react-router-dom";
-import { FaLinkedin, FaRegCopyright } from "react-icons/fa";
-import { GoogleAuthAPI, RegisterAPI } from "../Api/AuthApi";
-import { FcGoogle } from "react-icons/fc";
+// react
 import { useState } from "react";
-import logo from "../assets/images/LinkedIn_Logo.svg";
+import { useNavigate } from "react-router-dom";
+
+// icons
+import { FcGoogle } from "react-icons/fc";
+import { FaLinkedin, FaRegCopyright } from "react-icons/fa";
+
+// import
+import IMAGES from "../assets/images/index";
+// api
+import { GoogleAuthAPI, RegisterAPI } from "../Api/AuthApi";
 
 function RegisterComponent() {
    const navigate = useNavigate();
-   const [credentials, setCredentials] = useState({ email: "", password: "" });
+   const [credentials, setCredentials] = useState<{
+      email: string;
+      password: string;
+   }>({ email: "", password: "" });
    const register = () => {
       try {
          console.log("Register");
-         let res = RegisterAPI(credentials.email, credentials.password);
+         const res = RegisterAPI(credentials.email, credentials.password);
          // if (res.statusCode == 200)
          console.log(res);
       } catch (error) {
@@ -21,17 +30,18 @@ function RegisterComponent() {
    const googleSignIn = () => {
       try {
          console.log("Signing in...");
-         let res = GoogleAuthAPI();
+         const res = GoogleAuthAPI();
          console.log(res);
       } catch (error) {
          console.error(error);
       }
    };
+
    return (
       <section className="w-full h-screen  pb-0 font-[system-ui]  md:!bg-[#F3F2F0]">
          <header className="w-[90%] md:w-[70%] mx-auto pt-5">
             <img
-               src={logo}
+               src={IMAGES.logo}
                alt="LinkedIn-logo"
                className=" w-auto h-7 md:h-10"
             />
@@ -101,10 +111,7 @@ function RegisterComponent() {
                      show
                   </button>
                </div>
-               <div
-                  htmlFor=""
-                  className=" text-[12px] text-gray-600 text-center mt-5"
-               >
+               <div className=" text-[12px] text-gray-600 text-center mt-5">
                   By clicking Agree & Join, you agree to the LinkedIn
                   <a href="#" className="text-[#0A66C2] ml-1 font-semibold">
                      User Agreement,
@@ -117,14 +124,12 @@ function RegisterComponent() {
                      Cookie Policy.
                   </a>
                </div>
-               {/* <div> */}
                <button
                   onClick={register}
-                  className="text-[16px] w-full my-4 py-3 text-white rounded-full bg-[#0A66C2]  hover:bg-[#004182]"
+                  className="text-[16px] w-full my-4 py-3 text-white rounded-full bg-[#0A66C2]  hover-bg-[#004182]"
                >
                   Agree & Join
                </button>
-               {/* </div> */}
                <div className="relative my-4 mb-7">
                   <hr className="border-[1px] border-gray-300  " />
                   <span className="absolute text-gray-400 w-14 -top-[14px] right-[43%] bg-white  text-center">
@@ -134,7 +139,7 @@ function RegisterComponent() {
                <div className="relative  text-gray-500 text-[16px] font-semibold">
                   <button
                      onClick={googleSignIn}
-                     className="z-10 w-full py-1  rounded-full outline outline-1 outline-gray-400 hover:bg-slate-100 hover:ring-2 hover:ring-[#616161] hover:-outline-offset-[.5px]  hover:outline-[#616161] transition-all duration-300"
+                     className="z-10 w-full py-1  rounded-full outline outline-1 outline-gray-400 hover-bg-slate-100 hover-ring-2 hover-ring-[#616161] hover--outline-offset-[.5px]  hover-outline-[#616161] transition-all duration-300"
                   >
                      <FcGoogle className="inline text-[18px] mb-1 mr-1" /> Sign
                      in with Google

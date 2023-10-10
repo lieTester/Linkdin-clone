@@ -1,31 +1,35 @@
-import logo from "../assets/images/LinkedIn_Logo.svg";
+import IMAGES from "../assets/images/index";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaLinkedin, FaRegCopyright } from "react-icons/fa";
 import { GoogleAuthAPI, LoginAPI } from "../Api/AuthApi";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../Context/AuthProvider";
 
 function LoginComponent() {
    const navigate = useNavigate();
+   const AuthContextValue = useContext(AuthContext);
+   const setUser = AuthContextValue?.setUser;
    const [credentials, setCredentials] = useState({ email: "", password: "" });
 
-   const login = async (e) => {
-      e.preventDefault();
+   const login = async () => {
       try {
          console.log(credentials.email, credentials.password);
 
-         let res = await LoginAPI(credentials.email, credentials.password);
+         const res = await LoginAPI(credentials.email, credentials.password);
+         if (setUser && res) {
+            console.log(res);
+         }
          navigate("/");
          console.log(res);
       } catch (error) {
          console.log(error);
       }
    };
-   const googleSignIn = (e) => {
-      e.preventDefault();
+   const googleSignIn = () => {
       try {
          console.log("Signing in...");
-         let res = GoogleAuthAPI();
+         const res = GoogleAuthAPI();
          console.log(res);
          navigate("/");
       } catch (error) {
@@ -36,7 +40,7 @@ function LoginComponent() {
       <section className="w-full h-screen p-7 pb-0 font-[system-ui]">
          <header className="w-[90%] md:w-[70%] ">
             <img
-               src={logo}
+               src={IMAGES.logo}
                alt="LinkedIn-logo"
                className=" w-auto h-8 md:h-10"
             />
