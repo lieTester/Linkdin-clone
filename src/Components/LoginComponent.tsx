@@ -1,15 +1,13 @@
 import IMAGES from "../assets/images/index";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaLinkedin, FaRegCopyright } from "react-icons/fa";
-import { GoogleAuthAPI, LoginAPI } from "../Api/AuthApi";
-import { useState, useContext } from "react";
+import { GoogleAuthAPI, LoginAPI } from "../api/AuthApi";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../Context/AuthProvider";
 
 function LoginComponent() {
    const navigate = useNavigate();
-   const AuthContextValue = useContext(AuthContext);
-   const setUser = AuthContextValue?.setUser;
+
    const [credentials, setCredentials] = useState({ email: "", password: "" });
 
    const login = async () => {
@@ -17,23 +15,20 @@ function LoginComponent() {
          console.log(credentials.email, credentials.password);
 
          const res = await LoginAPI(credentials.email, credentials.password);
-         if (setUser && res) {
-            console.log(res);
-            setUser(res);
-         }
+         console.log(res);
          navigate("/");
       } catch (error) {
          console.log(error);
       }
    };
-   const googleSignIn = () => {
+   const googleSignIn = async () => {
       try {
          console.log("Signing in...");
-         const res = GoogleAuthAPI();
+         const res = await GoogleAuthAPI();
          console.log(res);
-         navigate("/");
+         if (res) navigate("/");
       } catch (error) {
-         console.error(error);
+         console.log("error-1", error);
       }
    };
    return (

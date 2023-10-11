@@ -9,7 +9,7 @@ import { FaLinkedin, FaRegCopyright } from "react-icons/fa";
 // import
 import IMAGES from "../assets/images/index";
 // api
-import { GoogleAuthAPI, RegisterAPI } from "../Api/AuthApi";
+import { GoogleAuthAPI, RegisterAPI } from "../api/AuthApi";
 
 function RegisterComponent() {
    const navigate = useNavigate();

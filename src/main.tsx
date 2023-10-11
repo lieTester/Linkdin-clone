@@ -5,7 +5,8 @@ import "./input.css";
 import Login from "./Components/LoginComponent";
 import Signup from "./Components/RegisterComponent";
 import Home from "./Components/HomeComponent";
-import { AuthProvider } from "./Context/AuthProvider";
+import { AuthProvider } from "./context/AuthProvider";
+import VerifyComponent from "./Components/VerifyComponent";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
    <React.StrictMode>
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Routes>
                <Route path="/login" element={<Login />} />
                <Route path="/register" element={<Signup />} />
-               <Route path="/" element={<Home />} />
+               <Route path="/" element={<VerifyComponent />}>
+                  <Route path="/" element={<Home />} />
+               </Route>
             </Routes>
          </AuthProvider>
       </BrowserRouter>

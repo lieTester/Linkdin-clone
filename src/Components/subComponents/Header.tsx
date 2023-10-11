@@ -1,10 +1,29 @@
-import { BiSearchAlt2, BiUser } from "react-icons/bi";
+// react
+import { useContext } from "react";
+import {} from "react";
+
+// icons
+import { BiSearchAlt2 } from "react-icons/bi";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { AiFillHome } from "react-icons/ai";
 import { IoIosNotifications } from "react-icons/io";
 import { HiUsers, HiBriefcase } from "react-icons/hi";
+// context
+import AuthContext from "../../context/AuthProvider";
+// firebase
+import { auth } from "../../../firebaseconfig";
 
 const Header = () => {
+   const contextValue = useContext(AuthContext);
+   const user = contextValue?.user;
+   const setUser = contextValue?.setUser;
+
+   const signout = () => {
+      if (auth && setUser) {
+         setUser(null);
+         auth.signOut();
+      }
+   };
    return (
       <section className="fixed flex top-0 w-[100%] h-[50px]  bg-[#FFFFFF]">
          <div className="w-[75%] h-full m-auto flex justify-between">
@@ -48,8 +67,18 @@ const Header = () => {
                   </span>
                </li>
                <li className=" text-[#666666] hover:text-[#23272E] pt-1 border-b-[2px] border-transparent">
-                  <BiUser size={25} />
-                  <span className="inline text-xs w-full -mt-1">Me</span>
+                  {user?.photoURL && (
+                     <>
+                        <img
+                           src={user.photoURL}
+                           alt="linked-in logo"
+                           className="w-[35px] h-[35px] rounded-full"
+                        />
+                        <label htmlFor="" onClick={signout}>
+                           signout
+                        </label>
+                     </>
+                  )}
                </li>
             </ul>
          </div>

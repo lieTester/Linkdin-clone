@@ -35,6 +35,7 @@ export const GoogleAuthAPI = async (): Promise<UserCredential | AuthError> => {
       const googleAuthProvider = new GoogleAuthProvider();
       return await signInWithPopup(auth, googleAuthProvider);
    } catch (error) {
+      console.log("error:", error);
       return error as AuthError;
    }
 };
