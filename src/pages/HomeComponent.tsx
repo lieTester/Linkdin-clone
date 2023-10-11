@@ -1,4 +1,4 @@
-import Header from "./subComponents/Header";
+import Header from "../components/subComponents/Header";
 
 function HomeComponent() {
    return (
