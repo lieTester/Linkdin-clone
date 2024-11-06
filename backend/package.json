@@ -1,0 +1,24 @@
+{
+   "name": "linkedin-mimic-backend",
+   "version": "1.0.0",
+   "description": "backend api's for linkedin-mimic",
+   "main": "server.js",
+   "scripts": {
+      "start": "nodemon main",
+      "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "author": "puneet",
+   "license": "MIT",
+   "dependencies": {
+      "cookie-parser": "^1.4.7",
+      "cors": "^2.8.5",
+      "dotenv": "^16.4.5",
+      "express": "^4.21.1",
+      "jsonwebtoken": "^9.0.2",
+      "mongoose": "^8.8.0",
+      "nodemon": "^3.1.7"
+   },
+   "devDependencies": {
+      "@types/node": "^22.9.0"
+   }
+}
