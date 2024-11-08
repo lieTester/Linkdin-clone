@@ -1,14 +1,24 @@
-import express from "express";
-import { login } from "../Controllers/userController"; // Ensure this import is correct
+const express = require("express");
+const {
+   login,
+   register,
+   verifyUser,
+   forgotPassword,
+} = require("../Controllers/userController"); // Ensure this import is correct
+const { accessTokenVerifier } = require("../Middlewares/authenticator"); // Ensure this import is correct
 
 const router = express.Router();
 
 // Define the login route
 router.post("/login", login); // Pass the login function directly
 
-// Example for the register route
-router.post("/register", (req, res) => {
-   res.status(200).json({ message: "Register successful" });
-});
+// Define the register route
+router.post("/register", register);
 
-export default router;
+// Define the forgot-password route
+router.post("/forgot-password", forgotPassword);
+
+// Define the user-verification route
+router.post("/user-verification", verifyUser);
+
+module.exports = router;

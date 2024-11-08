@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { encrypter } = require("../Utils/utilFunctions");
 
 // Define the experience schema
 const experienceSchema = new mongoose.Schema({
@@ -12,13 +13,18 @@ const experienceSchema = new mongoose.Schema({
 
 // Define the user schema
 const userSchema = new mongoose.Schema({
-   name: { type: String, required: true },
+   username: { type: String, required: true },
    email: { type: String, required: true, unique: true },
    password: { type: String, required: true },
-   verified: { type: Boolean, required: true },
-   profilePicture: { type: String },
+   verified: { type: Boolean, required: true, default: false },
+   profile: { type: String },
    about: { type: String },
    experience: { type: [experienceSchema] }, // Array of experience objects
+});
+// Define the user schema
+const userVerifySchema = new mongoose.Schema({
+   email: { type: String, required: true, unique: true },
+   OTP: { type: String, required: true },
 });
 
 // Hash the password before saving if it's new or modified
@@ -27,8 +33,7 @@ userSchema.pre("save", async function (next) {
       return next();
    }
    try {
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
+      this.password = await encrypter(this.password);
       next();
    } catch (err) {
       return next(err);
@@ -42,5 +47,6 @@ userSchema.methods.matchPasswords = async function (password) {
 
 // Create the model
 const User = mongoose.model("User", userSchema);
+const UserVerification = mongoose.model("UserVerification", userVerifySchema);
 
-module.exports = User;
+module.exports = { User, UserVerification };
