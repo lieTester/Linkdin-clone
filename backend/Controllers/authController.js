@@ -68,17 +68,19 @@ exports.register = async (req, res) => {
 
       // send mail with defined transport object
       const { transporter, OTP, option } = mailit(email);
+      const hassedPassword = await encrypter(password);
       await transporter
          .sendMail(option)
          .then(async () => {
             await User.create({
                email: email,
                username: username,
-               password: password,
+               password: hassedPassword,
                profile: profile || (await makeAvatar(username)),
             }).then(async () => {
                await UserVerification.create({
                   email: email,
+                  password: hassedPassword,
                   OTP: OTP,
                });
             });
@@ -108,22 +110,14 @@ exports.forgotPassword = async (req, res) => {
 
       // send mail with defined transport object
       const { transporter, OTP, option } = mailit(email);
+      const hassedPassword = await encrypter(newpassword);
       await transporter
          .sendMail(option)
          .then(async () => {
-            await User.updateOne(
-               { email: email },
-               {
-                  $set: {
-                     password: await encrypter(newpassword),
-                     verified: false,
-                  },
-               }
-            ).then(async () => {
-               await UserVerification.create({
-                  email: email,
-                  OTP: OTP,
-               });
+            await UserVerification.create({
+               email: email,
+               password: hassedPassword,
+               OTP: OTP,
             });
          })
          .catch((err) => {
@@ -147,21 +141,48 @@ exports.verifyUser = async (req, res) => {
 
    try {
       // Find the user by email
-      const verify = await UserVerification.findOne({ email });
-      if (!verify || verify.OTP !== OTP) {
+      const verifyUser = await UserVerification.findOne({ email });
+      if (!verifyUser || verifyUser.OTP !== OTP) {
          return res.status(400).json({ message: "Invalid credentials" });
       }
       // Send the token in the response
-      await UserVerification.deleteOne({ email: email });
       const user = await User.findOne({ email });
       await user.updateOne({
          $set: {
             verified: true,
+            refreshToken: " ", // so already saved cookie for session_id will not work
+            password: verifyUser.password,
          },
       });
+      await UserVerification.deleteOne({ email: email });
+
       res.status(200).json({ msg: "Success try login now!" });
    } catch (error) {
       console.error("Verification error:", error);
       res.status(500).json({ message: "Server error" });
+   }
+};
+
+exports.logout = async (req, res) => {
+   const cookie = req.cookies;
+   try {
+      if (!cookie?.SESSION_ID) {
+         return res.status(204).send(); //already no content in cookie
+      }
+      const SESSION_ID = cookie.SESSION_ID;
+
+      await User.findOneAndUpdate(
+         {
+            refreshToken: SESSION_ID,
+         },
+         { $set: { refreshToken: " " } }
+      );
+      res.clearCookie("SESSION_ID", { httpOnly: true });
+      return res.status(204).send(); //no content;
+   } catch (error) {
+      console.error(error.message);
+      return res
+         .status(500)
+         .json({ msg: "server error", error: error.message });
    }
 };

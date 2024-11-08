@@ -11,33 +11,44 @@ const experienceSchema = new mongoose.Schema({
    descriptionPointers: { type: String }, // Optional
 });
 
-// Define the user schema
-const userSchema = new mongoose.Schema({
-   username: { type: String, required: true },
-   email: { type: String, required: true, unique: true },
-   password: { type: String, required: true },
-   verified: { type: Boolean, required: true, default: false },
-   profile: { type: String },
-   about: { type: String },
-   experience: { type: [experienceSchema] }, // Array of experience objects
+// Define the education schema
+const educationSchema = new mongoose.Schema({
+   institution: { type: String, required: true },
+   degree: { type: String, required: true },
+   fieldOfStudy: { type: String },
+   startYear: { type: Number, required: true },
+   endYear: { type: Number },
+   description: { type: String }, // Optional
 });
+
+// Define the skills schema (can be simple or more complex if including endorsements)
+const skillSchema = new mongoose.Schema({
+   skillName: { type: String, required: true },
+   endorsements: { type: Number, default: 0 }, // Optional endorsement count
+});
+
+// Define the user schema with experience, education, and skills sections
+const userSchema = new mongoose.Schema(
+   {
+      username: { type: String, required: true },
+      email: { type: String, required: true, unique: true },
+      password: { type: String, required: true },
+      verified: { type: Boolean, required: true, default: false },
+      profile: { type: String },
+      about: { type: String },
+      refreshToken: { type: String, required: true, default: " " },
+      experience: { type: [experienceSchema] }, // Array of experience objects
+      education: { type: [educationSchema] }, // Array of education objects
+      skills: { type: [skillSchema] }, // Array of skills
+   },
+   { timestamps: true }
+); // Timestamps for created and updated times
+
 // Define the user schema
 const userVerifySchema = new mongoose.Schema({
    email: { type: String, required: true, unique: true },
+   password: { type: String, required: true },
    OTP: { type: String, required: true },
-});
-
-// Hash the password before saving if it's new or modified
-userSchema.pre("save", async function (next) {
-   if (!this.isModified("password")) {
-      return next();
-   }
-   try {
-      this.password = await encrypter(this.password);
-      next();
-   } catch (err) {
-      return next(err);
-   }
 });
 
 // Method to compare passwords
