@@ -7,7 +7,7 @@ const experienceSchema = new mongoose.Schema({
    endTime: { type: Date, required: true },
    organization: { type: String, required: true },
    designation: { type: String, required: true },
-   descriptionPointers: { type: String }, // Optional
+   descriptionPointers: { type: [String] }, // Optional
 });
 
 // Define the education schema
