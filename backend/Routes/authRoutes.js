@@ -4,9 +4,9 @@ const {
    logout,
    register,
    verifyUser,
+   refreshToken,
    forgotPassword,
 } = require("../Controllers/authController"); // Ensure this import is correct
-const { accessTokenVerifier } = require("../Middlewares/authenticator"); // Ensure this import is correct
 
 const router = express.Router();
 
@@ -22,5 +22,8 @@ router.post("/forgot-password", forgotPassword);
 
 // Define the user-verification route
 router.post("/user-verification", verifyUser);
+
+// Define the get-access-by-refreshToken route
+router.post("/get-access-by-refreshToken", refreshToken);
 
 module.exports = router;

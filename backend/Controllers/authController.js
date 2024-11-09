@@ -6,6 +6,7 @@ const {
    decrypter,
    getExpiry,
    makeAvatar,
+   verifyToken,
 } = require("../Utils/utilFunctions");
 const { mailit } = require("../Utils/mail");
 
@@ -24,7 +25,7 @@ exports.login = async (req, res) => {
          user._id,
          process.env.ACCESS_SECRET_KEY,
          // chnge 1d > 1m after work completed on api
-         "10m"
+         "30m"
       );
       const refreshToken = generateToken(
          { "jwt-token": "refreshToken", id: user._id },
@@ -44,6 +45,7 @@ exports.login = async (req, res) => {
          sameSite: "none",
          maxAge: getExpiry(22),
       });
+      // 200 ok/success
       return res.status(200).json({
          msg: "Login successfull",
          token: accessToken,
@@ -88,8 +90,8 @@ exports.register = async (req, res) => {
          .catch((err) => {
             throw err;
          });
-
-      return res.status(200).send({
+      // 201 :created
+      return res.status(201).send({
          msg: "Check your mail for verification!",
       });
    } catch (error) {
@@ -124,7 +126,8 @@ exports.forgotPassword = async (req, res) => {
             throw err;
          });
 
-      return res.status(200).send({
+      // 202 : accepted
+      return res.status(202).send({
          msg: "Check your mail for verification!",
       });
    } catch (error) {
@@ -179,6 +182,47 @@ exports.logout = async (req, res) => {
       );
       res.clearCookie("SESSION_ID", { httpOnly: true });
       return res.status(204).send(); //no content;
+   } catch (error) {
+      console.error(error.message);
+      return res
+         .status(500)
+         .json({ msg: "server error", error: error.message });
+   }
+};
+
+exports.refreshToken = async (req, res) => {
+   const cookie = req.cookies;
+   try {
+      if (!cookie?.SESSION_ID) {
+         return res.status(404).send({ msg: "Token not found" }); //no content in cookie
+      }
+      const SESSION_ID = cookie.SESSION_ID;
+      const _iduser = verifyToken(SESSION_ID, process.env.REFRESH_SECRET_KEY)
+         .data?.id; // we stored refresh token in different wat check login logic of refresh token
+      const user = await User.findOne({
+         _id: _iduser,
+         refreshToken: SESSION_ID,
+      });
+
+      if (user?.refreshToken.localeCompare(SESSION_ID)) {
+         return res
+            .status(400)
+            .send({ msg: 'Login again "token expired" or "user not found" !' }); //already no content in cookie
+      }
+
+      const accessToken = generateToken(
+         user._id,
+         process.env.ACCESS_SECRET_KEY,
+         // chnge 1d > 1m after work completed on api
+         "30m"
+      );
+
+      return res.status(200).json({
+         token: accessToken,
+         username: user.username,
+         id: user._id,
+         profile: user.profile,
+      });
    } catch (error) {
       console.error(error.message);
       return res

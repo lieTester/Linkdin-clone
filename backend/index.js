@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 // Routes Import
 const authRoutes = require("./Routes/authRoutes");
+const userRoutes = require("./Routes/userRoutes");
+const { accessTokenVerifier } = require("./Middlewares/authenticator");
 
 dotenv.config();
 
@@ -31,6 +33,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth/", authRoutes);
+app.use("/api/user/", accessTokenVerifier, userRoutes);
 
 const port = process.env.PORT || 5001;
 const server = app.listen(port, () => {

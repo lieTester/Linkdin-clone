@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const { encrypter } = require("../Utils/utilFunctions");
 
 // Define the experience schema
 const experienceSchema = new mongoose.Schema({
