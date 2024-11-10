@@ -4,6 +4,13 @@ const {
    getExperiences,
    updateExperience,
    deleteExperience,
+   addEducation,
+   getEducation,
+   updateEducation,
+   deleteEducation,
+   addSkill,
+   getSkills,
+   deleteSkill,
 } = require("../Controllers/userController");
 
 const router = express.Router();
@@ -14,34 +21,15 @@ router.post("/add-experience", addExperience);
 router.put("/update-experience/:id", updateExperience);
 router.delete("/delete-experience/:id", deleteExperience);
 
-// skill routes
-router.get("/get-skills", (req, res) => {
-   return res.status(200).send({ msg: "all-skills" });
-});
-router.post("/add-skill", (req, res) => {
-   console.log();
-   return res.status(200).send({ msg: "add-skill" });
-});
-router.delete("/delete-skill/:id", (req, res) => {
-   console.log();
-   return res.status(200).send({ msg: "delete-skill" });
-});
-
 // education routes
-router.get("/get-education", (req, res) => {
-   return res.status(200).send({ msg: "all-education" });
-});
-router.post("/add-education", (req, res) => {
-   console.log();
-   return res.status(200).send({ msg: "add-education" });
-});
-router.put("/update-education/:id", (req, res) => {
-   console.log();
-   return res.status(200).send({ msg: "update-education" });
-});
-router.delete("/delete-education/:id", (req, res) => {
-   console.log();
-   return res.status(200).send({ msg: "delete-education" });
-});
+router.get("/get-education", getEducation);
+router.post("/add-education", addEducation);
+router.put("/update-education/:id", updateEducation);
+router.delete("/delete-education/:id", deleteEducation);
+
+// skill routes
+router.get("/get-skills", getSkills);
+router.post("/add-skill", addSkill);
+router.delete("/delete-skill/:id", deleteSkill);
 
 module.exports = router;
