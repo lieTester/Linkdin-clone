@@ -79,7 +79,6 @@ exports.updateExperience = async (req, res) => {
 
       // Find the specific experience by its ID
       const experience = user.experience.id(_idexperience);
-      console.log(experience, _idexperience);
       if (!experience) {
          return res.status(404).json({ msg: "Experience not found" });
       }
@@ -110,7 +109,6 @@ exports.deleteExperience = async (req, res) => {
    const _idexperience = req.params.id;
 
    try {
-      console.log("delete");
       const user = await User.findById(_iduser);
       if (!user) {
          return res.status(404).json({ msg: "User not found" });
@@ -248,7 +246,6 @@ exports.deleteEducation = async (req, res) => {
    const _ideducation = req.params.id;
 
    try {
-      console.log("delete");
       const user = await User.findById(_iduser);
       if (!user) {
          return res.status(404).json({ msg: "User not found" });
@@ -339,7 +336,6 @@ exports.deleteSkill = async (req, res) => {
    const _idskill = req.params.id;
 
    try {
-      console.log("delete");
       const user = await User.findById(_iduser);
       if (!user) {
          return res.status(404).json({ msg: "User not found" });
